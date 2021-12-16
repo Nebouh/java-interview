@@ -1,10 +1,12 @@
 package async;
 
 import io.vavr.collection.List;
+import io.vavr.concurrent.Future;
 import io.vavr.*;
 import io.vavr.control.Option;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * You should complete the function in this class
@@ -23,15 +25,15 @@ class AsyncTest {
   );
 
   public static CompletableFuture<Option<Ceo>> getCeoById(String ceo_id) {
-    return null;
+	  return Future.of(() -> ceos.find(ceo -> ceo_id == ceo.id)).toCompletableFuture();
   }
 
   public static CompletableFuture<Option<Enterprise>> getEnterpriseByCeoId(String ceo_id) {
-    return null;
+	  return Future.of(() -> enterprises.find(entreprise -> ceo_id == entreprise.ceo_id)).toCompletableFuture();
   }
 
-  public static CompletableFuture<Tuple2<Option<Ceo>, Option<Enterprise>>> getCEOAndEnterprise(String ceo_id) {
-    return null;
+  public static CompletableFuture<Tuple2<Option<Ceo>, Option<Enterprise>>> getCEOAndEnterprise(String ceo_id) throws InterruptedException, ExecutionException {
+	  return Future.of(() -> Tuple.of(getCeoById(ceo_id).get(), getEnterpriseByCeoId(ceo_id).get())).toCompletableFuture();
   }
 
 }
